@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Redare sunet cu Web Audio API</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      background-color: #f5f5f5;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      background-color: #3498db;
+      color: white;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-bottom: 10px;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    button.stop-all {
+      background-color: #e74c3c;
+    }
+
+    button.stop-all:hover {
+      background-color: #c0392b;
+    }
+  </style>
+</head>
+<body>
+  <button onclick="playSound('sunet.wav')">Redă Sunet 1</button>
+  <button onclick="playSound('sunet.wav')">Redă Sunet 2</button>
+  <button onclick="stopAllSounds()" class="stop-all">Oprește Toate Sunetele</button>
+
+  <script>
+    let audioElement = null; // Variabilă pentru ținerea sunetului curent
+
+    function playSound(soundName) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (AudioContext) {
+        const audioContext = new AudioContext();
+        if (audioElement) {
+          audioElement.pause(); // Oprim sunetul anterior, dacă există
+        }
+        audioElement = new Audio(soundName); // Încărcăm noul sunet
+        const audioSource = audioContext.createMediaElementSource(audioElement);
+
+        audioSource.connect(audioContext.destination);
+        audioElement.play();
+      } else {
+        console.error('Web Audio API nu este suportat în acest browser.');
+      }
+    }
+
+    function stopAllSounds() {
+      if (audioElement) {
+        audioElement.pause(); // Oprim sunetul curent, dacă există
+        audioElement = null; // Setăm audioElement pe null
+      }
+    }
+  </script>
+</body>
+</html>
