@@ -73,3 +73,75 @@
   </script>
 </body>
 </html>
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Redare sunet cu Web Audio API</title>
+  <style>
+    /* Stilurile CSS pentru aspectul paginii */
+    body {
+      /* Stiluri pentru corpul paginii */
+    }
+
+    button {
+      /* Stiluri pentru butoane */
+    }
+
+    button:hover {
+      /* Stiluri pentru butoane la hover */
+    }
+
+    button.stop-all {
+      /* Stiluri pentru butonul care oprește toate sunetele */
+    }
+
+    button.stop-all:hover {
+      /* Stiluri pentru butonul care oprește toate sunetele la hover */
+    }
+  </style>
+</head>
+<body>
+  <!-- Butonul pentru redarea primului sunet -->
+  <button onclick="playSound('sunet.wav')">Redă Sunet 1</button>
+  <!-- Butonul pentru redarea celui de-al doilea sunet -->
+  <button onclick="playSound('sunet.wav')">Redă Sunet 2</button>
+  <!-- Butonul pentru oprirea tuturor sunetelor -->
+  <button onclick="stopAllSounds()" class="stop-all">Oprește Toate Sunetele</button>
+
+  <script>
+    let audioElement = null; // Variabilă pentru ținerea sunetului curent
+
+    function playSound(soundName) {
+      const AudioContext = window.AudioContext || window.webkitAudioContext; // Verificăm disponibilitatea Web Audio API în browser
+      if (AudioContext) {
+        const audioContext = new AudioContext(); // Creăm un context audio
+        if (audioElement) {
+          audioElement.pause(); // Oprim sunetul anterior, dacă există
+        }
+        audioElement = new Audio(soundName); // Încărcăm noul sunet
+        const audioSource = audioContext.createMediaElementSource(audioElement); // Creăm sursa audio
+
+        audioSource.connect(audioContext.destination); // Conectăm sursa audio la destinație (difuzoare)
+        audioElement.play(); // Redăm sunetul
+      } else {
+        console.error('Web Audio API nu este suportat în acest browser.'); // Mesaj de eroare în cazul în care Web Audio API nu este suportat
+      }
+    }
+
+    function stopAllSounds() {
+      if (audioElement) {
+        audioElement.pause(); // Oprim sunetul curent, dacă există
+        audioElement = null; // Setăm audioElement pe null pentru a opri complet sunetul
+      }
+    }
+  </script>
+</body>
+</html>
+
